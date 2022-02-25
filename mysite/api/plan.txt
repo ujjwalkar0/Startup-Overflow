@@ -1,0 +1,113 @@
+-------------------------Views---------------------------------
+Timeline:
+    Timeline
+    My Profile
+    Add Post
+    My Posts
+
+
+-------------------------Models---------------------------------
+
+User:(django.contrib.auth.models.User)
+    first name
+    last name
+    email
+    username
+    password
+
+Profile:(One one field with user)
+    Bio
+    Education
+    Hobbies
+    Interest
+    Posts
+    Mentor (Binary Field)
+    Investor (Binary Field)
+    Job Seacker (Binary Field)
+    Entreprenur (Binary Field)
+
+Posts: (One many field with User)
+    Id
+    Title
+    Description
+    Image
+    Video
+    Audio
+    Article
+
+Likes, Share, Comment: (One many field with Posts, User)
+    LCId
+    User_Id (Foreign Key with user id)
+    Post_Id (Foreign Key with Post -> Id)
+    Like/Dislike (Default 0, Like +1, Unlike -1)
+    Comment (Maxsize 200)
+    Image
+    Video
+    Audio
+    Article
+    Share (Binary field)
+
+Questions: (One many field with User)
+    Question Id
+    User Id
+    Title
+     Description (Richtext field)
+
+Answer: (One many field of Questions)
+    Answer Id
+    Question Id
+    User Id
+    Answer (Richtext field)
+
+Products: (One many field with User if User type is Entreprenurs)
+    id
+    title
+    description
+    catagories
+    images
+
+Rating, Review: (One many field with Products)
+    LCId
+    User_Id (Foreign Key with user id)
+    Post_Id (Foreign Key with Products -> Id)
+    Rating (0 to 5)
+    Comment (Maxsize 200)
+    Image
+    Video
+
+Messages: (One many field with User, Many to Many field with Group)
+    Sender Id
+    Reciever Id
+    Message
+    Attatchment
+
+Group: (Many to Many field with Message)
+    Group Id
+    Sender Id
+    Message
+    Attatchment
+
+Notification: (One many field with User)
+    User Id
+    Notification
+
+Jobs: (Many to Many field with User)
+    Job Id
+    Title
+    Description
+    Hashtag
+    Target Skill/Hobbies/Interest
+
+Plans: (One to Many Field with User)
+    id
+    user_id
+    title
+    short description
+    long description
+    attatchment
+
+Plan_to_Investor: (Many to Many Field with User)
+    id
+    user id
+    plan id
+    accept (binaryfield)
