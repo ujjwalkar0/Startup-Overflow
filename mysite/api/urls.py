@@ -11,6 +11,7 @@ urlpatterns = [
     path('',include(router.urls)),
     path('login/', obtain_auth_token),
     path('user/', UserView.as_view()),
+    path('user/<str:obj>', UserView.as_view()),
     path('register/', RegisterView.as_view()),
     path('question/', QuestionsView.as_view()),
     path('question/<int:pk>', QuestionsView.as_view()),

@@ -31,3 +31,8 @@ class QuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Questions
         fields = '__all__'
+
+class HobbiesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Hobbies
+        fields = '__all__'

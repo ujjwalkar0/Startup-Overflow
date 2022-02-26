@@ -66,12 +66,10 @@ class QuestionsView(APIView):
     authentication_classes = (TokenAuthentication,)
 
     def get(self, request,pk=None, format=None):
-        hashtags = TagFollow.objects.filter(follower=request.user)
-        print([i.name for i in hashtags])
-        print("\n\n\n")
-        print([i.hashtag for i in Questions.objects.all()])
+        hashtags = TagFollow.objects.filter(follower=request.user).values('name')
         if not pk:
-            questions = Questions.objects.filter(hashtag__in=[i.name for i in hashtags])
+            questions = Questions.objects.filter(hashtag__in=[i['name'] for i in hashtags])
+            print(questions)
         else:
             questions = Questions.objects.filter(id=pk)
 
@@ -138,8 +136,18 @@ class UserView(APIView):
         except Model.DoesNotExist:
             raise Http404
 
+
     def get(self, request, format=None):
-        return Response({"user":self.get_data(request.user, User, UserSerializer), "profile":self.get_data(request.user, Profile,ProfileSerializer)})
+        hobbies = Hobbies.objects.filter(username=self.user)
+        print(hobbies)
+        return Response({
+            "user":self.get_data(request.user, User, UserSerializer), 
+            "profile":self.get_data(request.user, Profile,ProfileSerializer),
+            "hobbies":self.get_data(request.user, Hobbies, HobbiesSerializer)
+            })
+
+    def post(self, request, obj, format=None):
+        return Response({"res":obj})
 
     def put(self,request):
         user = self.get_object(request.user.id)
