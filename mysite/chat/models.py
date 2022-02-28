@@ -19,8 +19,8 @@ class GroupMessage(models.Model):
         return self.message
 
 class Message(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender')
-    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sender', null=True)
+    reciever = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reciever', null=True)
     message = models.CharField(max_length=256)
 
     def __str__(self):
