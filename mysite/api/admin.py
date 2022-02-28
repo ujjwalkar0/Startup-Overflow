@@ -6,7 +6,6 @@ admin.site.register([
     Posts,
     Follow,
     Profile, 
-    Message, 
     Education, 
     Hobbies,
     Hashtag,
@@ -20,9 +19,7 @@ admin.site.register([
     Products,
     Catagory,
     RatingReview,
-    Group,
     Notification,
     Job,
-    Plans,
     ])
 # admin.site.register(Message)

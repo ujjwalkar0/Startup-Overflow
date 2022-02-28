@@ -146,30 +146,6 @@ class RatingReview(models.Model):
     def __str__(self):
         return self.catagory   
 
-class Message(models.Model):
-    sender = models.ManyToManyField(User, related_name='sender', null=True)
-    reciever = models.ManyToManyField(User, related_name='reciever', null=True)
-    message = models.CharField(max_length=256, null=True)
-
-    def __str__(self):
-        return self.message
-
-class GroupName(models.Model):
-    name = models.CharField(max_length=40, null=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', null=True)
-
-    def __str__(self):
-        return self.name
-
-class Group(models.Model):
-    name = models.ForeignKey(GroupName, on_delete=models.CASCADE, related_name='groupname', null=True)
-    admin = models.ManyToManyField(User, related_name='admin', null=True)
-    member = models.ManyToManyField(User, related_name='member', null=True)
-    message = models.CharField(max_length=256, null=True)
-
-    def __str__(self):
-        return self.name
-
 class Notification(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     noti = models.CharField(max_length=128, null=True)
@@ -184,10 +160,3 @@ class Job(models.Model):
     desc = models.TextField(null=True)
     hashtag = models.ManyToManyField(Hashtag, related_name='hashtag', null=True)
 
-class Plans(models.Model):
-    username = models.ForeignKey(User, on_delete=superuser, null=True)
-    title = models.CharField(max_length=128, null=True)
-    desc = models.TextField(null=True)
-    hashtag = models.ManyToManyField(Hashtag, related_name='hashplans', null=True)
-    attachment = models.FileField(upload_to='plans/', null=True)
-    accept = models.ForeignKey(User, on_delete=superuser, related_name='accept', null=True)

@@ -1,3 +1,4 @@
+from xml.dom.expatbuilder import parseString
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from .models import *
@@ -17,8 +18,8 @@ class TimelineView(APIView):
 
     def get(self, request, format=None):
         followings = Follow.objects.filter(username=request.user)
-        print([i.username for i in Posts.objects.all()])
-        posts = Posts.objects.filter(username__in=[i.following.username for i in followings])
+        hashtags = TagFollow.objects.filter(follower=request.user).values('name')
+        posts = Posts.objects.filter(username__in=[i.following.username for i in followings], hashtag__in=[i['name'] for i in hashtags])
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
@@ -146,13 +147,101 @@ class UserView(APIView):
             "hobbies":self.get_data(request.user, Hobbies, HobbiesSerializer)
             })
 
-    def post(self, request, obj, format=None):
-        return Response({"res":obj})
+    def post(self, request, obj=None, format=None):
+        if obj == "hobbies":            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    Hobbies.objects.create(
+                        username=request.user,
+                        name = tag
+                    )
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"Create {i} First"})
+            return Response({"Response":f"Hobbies Created"})
+
+
+        if obj == "interests":            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    Interests.objects.create(
+                        username=request.user,
+                        name = tag
+                    )
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"Create {i} First"})
+            return Response({"Response":f"Interests Created"})
+
+        if obj == "skills":            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    Skills.objects.create(
+                        username=request.user,
+                        name = tag
+                    )
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"Create {i} First"})
+            return Response({"Response":f"Skills Created"})
 
     def put(self,request):
         user = self.get_object(request.user.id)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+    
+    def delete(self, request, obj=None, format=None):
+        if obj == "hobbies":            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    a = Hobbies.objects.filter(
+                        username=request.user,
+                        name = tag
+                    )
+                    print(a)
+                    if a.count()==0:
+                        return Response({"Response":f"{i} Not exist"})
+                    a.delete()
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"{i} Not exist"})
+            return Response({"Response":f"Hobbies Deleted"})
+
+
+        if obj == "interests":
+            flag = 0            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    a = Interests.objects.filter(
+                        username=request.user,
+                        name = tag
+                    )
+                    if a.count()==0:
+                        flag = 1
+                    a.delete()
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"{i} Not exist"})
+            if flag==1:
+                return Response({"Response":f"Interests Created"})
+            else:
+                return Response({"Response":f"Interests Not exist"})
+
+        if obj == "skills":            
+            for i in request.data["name"]:
+                try:
+                    tag = Hashtag.objects.get(name=i)
+                    a = Skills.objects.filter(
+                        username=request.user,
+                        name = tag
+                    )
+                    if a.count()==0:
+                        return Response({"Response":f"{i} Not exist"})
+                    a.delete()
+                except Hashtag.DoesNotExist:
+                    return Response({"Response":f"{i} Not exist"})
+            return Response({"Response":f"Skills Created"})
+
 
 class ProfileView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
