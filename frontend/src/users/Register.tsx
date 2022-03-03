@@ -1,5 +1,6 @@
-import React, { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useState } from "react";
 import {Navigate} from 'react-router-dom';
+import MyNavbar from "../components/MyNavbar";
 
 const Register = () => {
     const [first_name, setFirstName] = useState('');
@@ -13,36 +14,32 @@ const Register = () => {
     const submit = async (e: SyntheticEvent) => {
         e.preventDefault();
 
-        console.log(
-            first_name,
-            last_name,
-            email,
-            username,
-            password,
-            confirm_password
-        )
-        
-        const response = await fetch('http://127.0.0.1:8000/register/',{
-            method:"POST",
-            headers: {"Content-Type": "application/json"},
-            body:JSON.stringify({
-                first_name,
-                last_name,
-                email,
-                username,
-                password,
-                confirm_password
-            })
-        })
-        setRedirect(true)
+        if (password===confirm_password){
+          const response = await fetch('http://127.0.0.1:8000/users/register/',{
+              method:"POST",
+              headers: {"Content-Type": "application/json"},
+              body:JSON.stringify({
+                  first_name,
+                  last_name,
+                  email,
+                  username,
+                  password,
+                  confirm_password
+              })
+          })
+          setRedirect(true)
+          const content = await response.json()
+          console.log(content)
+        }
 
     }
 
     if (redirect){
-        return <Navigate to="/login/"/>
+        return <Navigate to="/"/>
     }
 
     return (
+    <MyNavbar>
         <form onSubmit={submit}>
             <input placeholder="First Name" name="first_name" onChange={e => setFirstName(e.target.value) } />
             <input placeholder="Last Name" name="last_name" onChange={e => setLastName(e.target.value) }/>
@@ -52,6 +49,7 @@ const Register = () => {
             <input placeholder="Confirm Password" name="confirm_password" onChange={e => setConfirmPassword(e.target.value) }/>
             <button type="submit">Submit</button>
         </form>
+    </MyNavbar>
     )
 }
 
