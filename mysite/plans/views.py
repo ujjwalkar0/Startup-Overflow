@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from plans.models import *
 from plans.serializers import *
-from api.models import Hashtag, TagFollow
+from hashtag.models import Hashtag, TagFollow
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication

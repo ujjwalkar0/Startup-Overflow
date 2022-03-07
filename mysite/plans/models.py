@@ -1,5 +1,5 @@
 from django.db import models
-from api.models import Hashtag, superuser
+from hashtag.models import Hashtag, superuser
 from django.contrib.auth.models import User
 
 class Plans(models.Model):

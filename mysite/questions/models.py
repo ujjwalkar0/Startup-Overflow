@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from hashtag.models import Hashtag
 
 class Questions(models.Model):
     username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
